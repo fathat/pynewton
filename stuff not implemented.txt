@@ -1,0 +1,92 @@
+
+void NewtonWorldForEachBodyDo (const NewtonWorld* newtonWorld, NewtonBodyIterator callback);
+void NewtonWorldRayCast (const NewtonWorld* newtonWorld, const dFloat* p0, const dFloat* p1, NewtonWorldRayFilterCallback filter, void* userData);
+
+// **********************************************************************************************
+//
+// Physics Contact control functions
+//
+// **********************************************************************************************
+
+void *NewtonMaterialGetMaterialPairUserData (const NewtonMaterial* material);
+
+// **********************************************************************************************
+//
+// complex collision primitives creation functions
+// note: can only be used with static bodies (bodies with infinite mass)
+//
+// **********************************************************************************************
+
+NewtonCollision* NewtonCreateUserMeshCollision (const NewtonWorld* newtonWorld, const dFloat *minBox, 
+	const dFloat *maxBox, void *userData, NewtonUserMeshCollisionCollideCallback collideCallback, 
+	NewtonUserMeshCollisionRayHitCallback rayHitCallback, NewtonUserMeshCollisionDestroyCallback destroyCallback);
+
+// **********************************************************************************************
+//
+// CollisionTree Utility functions
+//
+// **********************************************************************************************
+
+void NewtonTreeCollisionSerialize (const NewtonCollision* treeCollision, NewtonSerialize serializeFunction, 
+	void* serializeHandle);
+
+NewtonCollision* NewtonCreateTreeCollisionFromSerialization (const NewtonWorld* newtonWorld, 
+	NewtonTreeCollisionCallback userCallback, NewtonDeserialize deserializeFunction, void* serializeHandle);
+
+
+// **********************************************************************************************
+//
+// General purpose collision library functions
+//
+// **********************************************************************************************
+
+int NewtonCollisionCollide (const NewtonWorld* newtonWorld, int maxSize,
+	const NewtonCollision* collsionA, const dFloat* matrixA, const NewtonCollision* collsionB, const dFloat* matrixB,
+	dFloat* contacts, dFloat* normals, dFloat* penetration);
+
+int NewtonCollisionCollideContinue (const NewtonWorld* newtonWorld, int maxSize, const dFloat timestap, 
+	const NewtonCollision* collsionA, const dFloat* matrixA, const dFloat* velocA, const dFloat* omegaA, 
+	const NewtonCollision* collsionB, const dFloat* matrixB, const dFloat* velocB, const dFloat* omegaB, 
+	dFloat* timeOfImpact, dFloat* contacts, dFloat* normals, dFloat* penetration);
+
+
+// **********************************************************************************************
+//
+// Rag doll joint container functions
+//
+// **********************************************************************************************
+ NewtonRagDoll* NewtonCreateRagDoll (const NewtonWorld* newtonWorld);
+ void NewtonDestroyRagDoll (const NewtonWorld* newtonWorld, const NewtonRagDoll* ragDoll);
+
+ void NewtonRagDollBegin (const NewtonRagDoll* ragDoll);
+ void NewtonRagDollEnd (const NewtonRagDoll* ragDoll);
+
+//	 void NewtonRagDollSetFriction (const NewtonRagDoll* ragDoll, dFloat friction);
+
+ NewtonRagDollBone* NewtonRagDollFindBone (const NewtonRagDoll* ragDoll, int id);
+//	 NewtonRagDollBone* NewtonRagDollGetRootBone (const NewtonRagDoll* ragDoll);
+
+ void NewtonRagDollSetForceAndTorqueCallback (const NewtonRagDoll* ragDoll, NewtonApplyForceAndTorque callback);
+ void NewtonRagDollSetTransformCallback (const NewtonRagDoll* ragDoll, NewtonSetRagDollTransform callback);
+ NewtonRagDollBone* NewtonRagDollAddBone (const NewtonRagDoll* ragDoll, const NewtonRagDollBone* parent, 
+		                                            void *userData, dFloat mass, const dFloat* matrix, 
+													const NewtonCollision* boneCollision, const dFloat* size);
+
+ void* NewtonRagDollBoneGetUserData (const NewtonRagDollBone* bone);
+ NewtonBody* NewtonRagDollBoneGetBody (const NewtonRagDollBone* bone);
+ void NewtonRagDollBoneSetID (const NewtonRagDollBone* bone, int id);
+
+
+ void NewtonRagDollBoneSetLimits (const NewtonRagDollBone* bone, 
+		                                    const dFloat* coneDir, dFloat minConeAngle, dFloat maxConeAngle, dFloat maxTwistAngle,
+											const dFloat* bilateralConeDir, dFloat negativeBilateralConeAngle, dFloat positiveBilateralConeAngle);
+
+//	 NewtonRagDollBone* NewtonRagDollBoneGetChild (const NewtonRagDollBone* bone);
+//	 NewtonRagDollBone* NewtonRagDollBoneGetSibling (const NewtonRagDollBone* bone);
+//	 NewtonRagDollBone* NewtonRagDollBoneGetParent (const NewtonRagDollBone* bone);
+//	 void NewtonRagDollBoneSetLocalMatrix (const NewtonRagDollBone* bone, dFloat* matrix);
+//	 void NewtonRagDollBoneSetGlobalMatrix (const NewtonRagDollBone* bone, dFloat* matrix);
+
+ void NewtonRagDollBoneGetLocalMatrix (const NewtonRagDollBone* bone, dFloat* matrix);
+ void NewtonRagDollBoneGetGlobalMatrix (const NewtonRagDollBone* bone, dFloat* matrix);
+
